@@ -16,16 +16,8 @@
             }
             return $this->conn;
         }
-        public function fetchDB(){
-         $conn = $this->conn;
-         $stmt = $conn->prepare('SELECT * FROM users');
-         
 
-   
-            
-        }
     }
-    $connection = new Database();
-    $connection->connectDB();
-    $connection->fetchDB();
+    
+
 ?>

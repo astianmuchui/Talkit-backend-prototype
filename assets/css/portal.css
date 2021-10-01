@@ -1,20 +1,33 @@
 body{
     margin: 0;
     padding: 0;
-    background-color: rgb(1, 3, 24);
-    overflow: hidden;
+    background-color: #00030a;
+    overflow-x: hidden;
+
 }
 *{
     list-style-type: none;
     text-decoration: none;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: monospace;
+    font-weight: 500;
+}
+::-webkit-scrollbar{
+    width: 5px;
+}
+::-webkit-scrollbar-track{
+    background-color: #00030a;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #2fa4e7;
+    border-radius: 500px;
 }
 
 header{
     width: 100%;
     height: 50px;
-    background-color: rgb(22, 200, 231);
+    background-color: #2fa4e7;
     position: sticky;
+    z-index: 9999;
     top: 0;
     display: inline-flex;
 }
@@ -33,15 +46,68 @@ header nav ul {
 }
 
 header nav ul li a{
-    color: black;
+    color: rgb(255, 255, 255);
     border-radius: 3px;
     padding: 5px 10px;
+    font-size: 14px;
 }
 main{
     display: inline-flex;
 }
 .sidebar{
     width: 20vw;
-    background-color: rgb(0, 0, 0);
+    background-color: #00030a;
     height: 93vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    justify-content: center;
+    position: fixed;
+    overflow: hidden;
+
+}
+.sidebar h2{
+    color: #2fa4e7;
+    font-family: monospace;
+}
+.leftbar{
+    margin-left: 10%;
+    width: 100vw;
+    background-color: #00030a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    justify-content: center;
+}
+.leftbar h2{
+    color: #2fa4e7;
+}
+.leftbar .chat{
+    margin-bottom: 10px;
+    padding: 10px;
+    height: 80px;
+    width: 50%;
+    border: 1px solid #2fa4e7;
+    border-radius: 20px 5px 20px 5px;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    align-content: center;
+    justify-items: center;
+    justify-content: center;
+}
+.chat a{
+    color: #2fa4e7;
+    cursor: grab;
+}
+.chat a:hover{
+    text-decoration: underline 1px #2fa4e7;
+}
+.chat small{
+    color: #fff;
+    margin: 2px 0;
 }
