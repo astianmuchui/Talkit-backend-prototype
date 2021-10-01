@@ -23,7 +23,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#" class="btn">Login</a></li>
+                <li><a href="./login.php" class="btn">Login</a></li>
             </ul>
         </nav>
     </header>

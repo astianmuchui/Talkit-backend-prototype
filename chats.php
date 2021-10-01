@@ -1,3 +1,7 @@
+<?php
+    require './core/core.inc.php';
+    getUsers();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,17 +35,17 @@
 
         <div class="users-container">
             <div class="bar">
-                <p>Available users (2)</p>
+                <p>Available users (<?php echo count($users); ?>)</p>
             </div>
+            <?php foreach($users as $user): ?>
+                
             <div class="card">
-                <p>Amanda  jones</p>
-                <a href="#">start chat</a>
+                <p><?php echo $user['uname'] ?></p>
+                <a href="./action/create_room.php?id=<?php echo $user['uid']; ?>">start chat</a>
 
             </div>
-            <div class="card">
-                <p>Adam Price</p>
-                <a href="#">start chat</a>
-            </div>
+            <?php endforeach; ?>
+            
         </div>
 
     </main>

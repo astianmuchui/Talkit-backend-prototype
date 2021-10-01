@@ -1,21 +1,32 @@
 <?php
     $feedback = "";
-    include './core/config.php';
+
     if(isset($_POST['login'])){
         $name = htmlspecialchars($_POST['u_name']);
         $_pwd = htmlspecialchars($_POST['p_wd']);
-        $query = "SELECT * FROM users WHERE `uname` = '$name' AND `pwd` = '$_pwd' LIMIT 1";
-        $result = mysqli_query($db,$query);
-        $users = mysqli_fetch_assoc($result);
-        if($users == FALSE){
-            $feedback = "Invalid username or password";
-        }else{
-            $user_uid = $users['uid'];
-            header("Location ./profile.php?id=$user_uid");
-        }
-        mysqli_free_result($result);
-        mysqli_close($db);
+        
+        if(!empty($name) && !empty($_pwd)){
+            include './core/config.php';
+            $query = "SELECT * FROM users WHERE `uname` = '$name'";
+            $result = mysqli_query($db,$query);
+            $user = mysqli_fetch_assoc($result);
 
+
+            if($result == true){
+                $user_id = $user['uid']*7;
+                session_start();
+                $_SESSION['id'] = $user_id;
+                header("Location: ./profile.php?id=$user_id");
+            }else{
+                $feedback = "Invalid username or password";
+            }
+
+        }else{
+            //
+            mysqli_free_result($result);
+            mysqli_close($db);
+        }
+        
 
     }
 ?>
@@ -35,7 +46,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#" class="btn">Signup</a></li>
+                <li><a href="./index.php" class="btn">Signup</a></li>
             </ul>
         </nav>
     </header>
