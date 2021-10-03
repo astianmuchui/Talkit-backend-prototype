@@ -20,8 +20,9 @@
 
           $build = mysqli_query($db,$query);
           if($build){
-            $Query = "ALTER TABLE `10and1` CHANGE `id` `id` INT(255) NOT NULL AUTO_INCREMENT, add PRIMARY KEY (`id`);";
+            $Query = "ALTER TABLE `$name` CHANGE `id` `id` INT(255) NOT NULL AUTO_INCREMENT, add PRIMARY KEY (`id`);";
             if(mysqli_query($db,$Query)){
+                $_SESSION['table'] = $name;
                 header('Location: ../chat.php');                
             }
           }

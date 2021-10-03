@@ -12,13 +12,18 @@
             $user = mysqli_fetch_assoc($result);
 
 
-            if($result == true){
-                $user_id = $user['uid']*7;
-                session_start();
-                $_SESSION['id'] = $user_id;
-                header("Location: ./profile.php?id=$user_id");
+            if($user == true){
+                if($user['pwd'] == $_pwd){
+                    $user_id = $user['uid']*7;
+                    session_start();
+                    $_SESSION['id'] = $user_id;
+                    header("Location: ./profile.php?id=$user_id");
+                }else{
+                    $feedback = "Wrong password";
+                }
+
             }else{
-                $feedback = "Invalid username or password";
+                $feedback = "Invalid username";
             }
 
         }else{

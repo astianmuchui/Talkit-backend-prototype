@@ -1,5 +1,6 @@
 <?php
-    $feedback = '';
+session_start();
+$feedback = '';
     function sanitizeForm($name,$_pwd){
         global $feedback;
         if(empty($name)){
@@ -25,6 +26,7 @@
                 foreach ($users as $user){
                     $id = $user['uid'];
                     $finall = $id*7;
+                    $_SESSION['id'] = $finall;
                     header("Location: ./profile.php?id=$finall");
                 }
 
