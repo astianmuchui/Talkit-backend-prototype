@@ -1,6 +1,8 @@
 <?php
 session_start();
+
 $feedback = '';
+
     function sanitizeForm($name,$_pwd){
         global $feedback;
         if(empty($name)){

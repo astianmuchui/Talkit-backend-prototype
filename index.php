@@ -1,9 +1,12 @@
 <?php
-   require './core/core.inc.php';
+    $feedback = "";
     if(isset($_POST['signup'])){
-        $name = htmlspecialchars($_POST['u_name']);
-        $_pwd = htmlspecialchars($_POST['p_wd']);
-        sanitizeForm($name,$_pwd);    
+        require './core/config.php';
+        require_once './classes/classes.php';  
+        $username = mysqli_real_escape_string($db,$_POST['u_name']);
+        $password = mysqli_real_escape_string($db,$_POST['p_wd']);
+        $signup = new user();  
+        $signup->CreateUser($username,$password);
     }
 
 ?>
@@ -32,7 +35,7 @@
     <main>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <input type="text" name="u_name" id="" placeholder="Username">
-            <input type="password" name="p_wd" id="" placeholder="password">
+            <input type="password" name="p_wd" id="" placeholder="password" >
             <input type="submit" value="signup" name="signup">
         </form>
     </main>

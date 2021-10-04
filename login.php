@@ -59,8 +59,8 @@
     <p class="feedback"> <?php echo $feedback."<br>"; ?> </p>
     <main>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            <input type="text" name="u_name" id="" placeholder="Username">
-            <input type="password" name="p_wd" id="" placeholder="password">
+            <input type="text" name="u_name" id="" placeholder="Username" required>
+            <input type="password" name="p_wd" id="" placeholder="password" required>
             <input type="submit" value="login" name="login">
         </form>
     </main>
