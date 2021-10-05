@@ -5,7 +5,7 @@
         require_once './classes/classes.php';  
         $username = mysqli_real_escape_string($db,$_POST['u_name']);
         $password = mysqli_real_escape_string($db,$_POST['p_wd']);
-        $signup = new user();  
+        $signup = new encryptedUser();  
         $signup->CreateUser($username,$password);
     }
 

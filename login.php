@@ -5,33 +5,9 @@
         $name = htmlspecialchars($_POST['u_name']);
         $_pwd = htmlspecialchars($_POST['p_wd']);
         
-        if(!empty($name) && !empty($_pwd)){
-            include './core/config.php';
-            $query = "SELECT * FROM users WHERE `uname` = '$name'";
-            $result = mysqli_query($db,$query);
-            $user = mysqli_fetch_assoc($result);
-
-
-            if($user == true){
-                if($user['pwd'] == $_pwd){
-                    $user_id = $user['uid']*7;
-                    session_start();
-                    $_SESSION['id'] = $user_id;
-                    header("Location: ./profile.php?id=$user_id");
-                }else{
-                    $feedback = "Wrong password";
-                }
-
-            }else{
-                $feedback = "Invalid username";
-            }
-
-        }else{
-            //
-            mysqli_free_result($result);
-            mysqli_close($db);
-        }
-        
+        require_once './classes/classes.php';
+        $login = new PasswordDecryption();
+        $login->decryptPassword();       
 
     }
 ?>
