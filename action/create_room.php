@@ -1,5 +1,4 @@
 <?php
-    session_start();
     if(isset($_GET['id'])){
         
         require_once '../classes/classes.php';

@@ -1,10 +1,20 @@
 <?php
-    session_start();
-    if($_SESSION['id'] == NULL ){
-        //redirect
-        header('');
+    $feedback = '';
+    require './classes/classes.php';
+    if($_SESSION['id'] !== NULL ){
+        $logged_in_user = $_SESSION['id'];
+        $table = $_SESSION['table'];
+        $recepient = ['recepientID'];
+        $x = new ChatUser;
+        $x->GetChatUser();
+        if(isset($_POST['send'])){
+            $message = htmlspecialchars($_POST['message']);
+            $y = new message;
+            $y->encryptMessage();
+        }
+    }else{
+        header('./login.php');
     }
-    $uid = $_SESSION['id'];
 
 ?>
 
@@ -30,10 +40,11 @@
             </ul>
         </nav>
     </header>
+    <center><small class "feedback"><?php echo $feedback; ?></small></center>
     <main>
         <div class="sidebar">
             <img src="./assets/img/images-removebg-preview.png" alt="" width="150" height="150">
-            <h2>Jesse Freeman</h2>
+            <h2><?php echo $user['uname']; ?></h2>
             
         </div>
         <div class="leftbar">
@@ -85,9 +96,9 @@
 
             </div>
             <div class="form-container">
-                <form action="#" method="post">
-                    <textarea name="" id="" cols="30" rows="10"></textarea>
-                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                    <textarea name="message" id="" cols="30" rows="10"></textarea>
+                    <button type="submit" name="send"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
         </div>

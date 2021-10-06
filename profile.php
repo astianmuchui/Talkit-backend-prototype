@@ -1,19 +1,9 @@
 <?php
-    session_start();
-        if(isset($_GET['id'])){
-            $id = $_GET['id'];
-            $actual = $id/7;
-            require './core/config.php';
-            $query = "SELECT * FROM users WHERE `uid` = $actual";
-            $result = mysqli_query($db,$query);
-            $user = mysqli_fetch_assoc($result);
-            mysqli_free_result($result);
-            mysqli_close($db);
-            global $user;
-        }else{
-            header("Location: ./login.php");
-        }
-    
+    require_once './functions/functions.php';    
+    require_once './classes/classes.php';
+    checkLogin();
+    new user();
+    FetchUser();        
 ?>
 <!DOCTYPE html>
 <html lang="en">

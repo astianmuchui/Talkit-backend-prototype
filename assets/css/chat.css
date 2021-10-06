@@ -76,6 +76,14 @@ main{
     overflow: hidden;
 
 }
+.feedback{
+    color: rgb(196, 87, 87);
+    width: 100%;
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 100;
+}
 .sidebar h2{
     color: #2fa4e7;
     font-family: monospace;

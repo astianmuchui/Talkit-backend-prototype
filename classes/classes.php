@@ -1,6 +1,7 @@
 <?php
+session_start();
 #=============================================================================================================================================#
-    class Database{
+    class PDODatabase{
         private $host = 'localhost';
         private $db_name = 'chat-system';
         private $username = 'root';
@@ -17,6 +18,16 @@
             return $this->conn;
         }
     }
+    class vanillaDB{
+        public function connect(){
+             try {
+            $db = mysqli_connect('localhost','root','','chat-system');
+            return $db;
+        } catch (Exception $e) {
+            echo $e;
+        }
+    }
+}
 #============================================================================================================================================#
     class chatroom{
         private $session_id;
@@ -25,7 +36,7 @@
         private $chatroom_name;
         public function BuildRoom(){
             global $db;
-            $this->session_id = $_SESSION['id']/7;
+            $this->session_id = $_SESSION['id'];
             $this->get_id = $_GET['id'];
             #Ensure That one doesn"t create a chatroom with him/herself 
             if($this->session_id == $this->get_id){
@@ -42,15 +53,18 @@
                 mysqli_free_result($result);
                 if(in_array($this->chatroom_name,$tables) || in_array($inverted_name,$tables)){
                     //FUNCTION TO REDIRECT HERE
+                    $_SESSION['chat_room'] = $this->chatroom_name;
+                    $_SESSION['recepientID'] = $this->get_id;
+                    header("Location: ../chat.php");
                 }else{
                         # CREATE CHAT ROOM IF ITS NOT PRE-EXISTING
-                        $create = "CREATE TABLE `$this->chatroom_name` (
-                            `id` int(255) NOT NULL,
-                            `id_1` varchar(255) NOT NULL,
-                            `id_2` varchar(255) NOT NULL,
-                            `message` varchar(255) NOT NULL,
-                            `date` timestamp(6) NOT NULL DEFAULT current_timestamp(6)
-                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+                    $create = "CREATE TABLE `$this->chatroom_name` (
+                        `id` int(255) NOT NULL,
+                        `id_1` varchar(255) NOT NULL,
+                        `id_2` varchar(255) NOT NULL,
+                        `message` varchar(255) NOT NULL,
+                        `date` timestamp(6) NOT NULL DEFAULT current_timestamp(6)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
                         $buildRoom = mysqli_query($this->db,$create);
                     if($buildRoom){
                             #ADD PRIMARY KEY TO THE ID
@@ -60,7 +74,7 @@
                             //Make session variables
                             $_SESSION['chat_room'] = $this->chatroom_name;
                             $_SESSION['recepientID'] = $this->get_id;
-                            
+                            header("Location: ../chat.php");
                             //redirect to relevant page
                         }
                     }
@@ -89,8 +103,6 @@
         private $encrypted_password;
         public function CreateUser($username,$password){
             global $feedback;
-            $database = new Database();
-            $database->connectDB();
             $this->username = $_POST['u_name'];
             $this->password = $_POST['p_wd'];
             //Sanitize form
@@ -119,9 +131,12 @@
                         mysqli_free_result($result);
                         foreach ($users as $user){
                             $id = $user['uid'];
-                            $finall = $id*7;
+                            $finall = $id;
                             $_SESSION['id'] = $finall;
-                            header("Location: ./profile.php?id=$finall");
+                            $layer_one = base64_encode($user['uid']);
+                            $layer_two = base64_encode($layer_one);
+                            $layer_three = base64_encode($layer_two);
+                            header("Location: ./profile.php?id=$layer_three");
                         }
                         mysqli_close($db);
                     }
@@ -156,10 +171,10 @@
             $conn = mysqli_connect('localhost','root','','chat-system');
             $query = "SELECT * FROM `users` where `uname` = '$this->name'";
             $result = mysqli_query($conn,$query);
-            $user = mysqli_fetch_assoc($result);
-            mysqli_free_result($result);
-            mysqli_close($conn);
-            if($result == true){
+            $user = mysqli_fetch_assoc($result);                
+            if($user == true){
+                mysqli_free_result($result);
+                mysqli_close($conn);
                 //User exists 
                 //Proceed to check for password
                 $upwd = $user['pwd'];
@@ -173,7 +188,11 @@
                         $actual_password = base64_decode($base64Encoded);
                         if($this->pwd === $actual_password){
                             $_SESSION['id'] = $user['uid'];
-                            header("Location: ./profile.php");
+                            //Triple encoding for the id
+                            $layer_one = base64_encode($user['uid']);
+                            $layer_two = base64_encode($layer_one);
+                            $layer_three = base64_encode($layer_two);
+                            header("Location: ./profile.php?id=$layer_three");
                         }else{
                             //Wrong password 
                             $feedback = "Wrong password";
@@ -189,6 +208,7 @@
             }   
         }
     }
+#=================================================================================================================================================================================#
 
     class users {
        public function getUsers(){
@@ -206,4 +226,80 @@
            
         }
     }
+#=================================================================================================================================================================================#
+
+    class user{
+        private $person;
+        public function FetchUser(){
+            global $user,$db;
+            try{
+                $id = $_GET['id'];
+                $layer_one_id = base64_decode($id);
+                $layer_two_id = base64_decode($layer_one_id);
+                $actual_id = base64_decode($layer_two_id);
+                global $actual_id;
+                $_SESSION['id'] = $actual_id;
+                $db = mysqli_connect('localhost','root','','chat-system');
+                $query = "SELECT * FROM `users` WHERE `uid` = '$actual_id'";
+                $result = mysqli_query($db,$query);
+                $user = mysqli_fetch_assoc($result);
+                mysqli_free_result($result);
+                mysqli_close($db);
+
+            }catch(Exception $e){
+                print $e;
+            }
+        }
+    }
+#=================================================================================================================================================================================#
+  class ChatUser{
+    public function GetChatUser(){
+        global $user,$db;
+        try{
+            $id = $_SESSION['id'];
+            $db = mysqli_connect('localhost','root','','chat-system');
+            $query = "SELECT * FROM `users` WHERE `uid` = '$id'";
+            $result = mysqli_query($db,$query);
+            $user = mysqli_fetch_assoc($result);
+            mysqli_free_result($result);
+            mysqli_close($db);
+        }catch(Exception $e){
+            print $e;
+        }
+    }
+  }  
+#=================================================================================================================================================================================#
+
+  class message{
+      private $message;
+      private $logged_in_user;
+      private $table;
+      private $recepient;
+      private $db;
+      public function encryptMessage(){
+          global $feedback;
+        //Declare variables
+        $this->db = mysqli_connect('localhost','root','','chat-system');
+        $this->message = htmlspecialchars($_POST['message']);
+        $this->logged_in_user = $_SESSION['id'];
+        $this->recepient = $_SESSION['recepientID'];
+        $this->table = $_SESSION['table'];
+        //Encrypt message
+        $encry_mess_hex = bin2hex(mysqli_real_escape_string($this->db,$this->message));
+        $encry_mess_bs64 = base64_encode($encry_mess_hex);
+        //Encrypt ID's
+        $enc_id_one = base64_encode($this->logged_in_user);
+        $enc_id_two = base64_encode($this->recepient);
+        //Insert into database
+        try{
+            if(mysqli_query($this->db,"INSERT INTO `$this->table` (`id_1`,`id_2`,`message`) VALUES ('$enc_id_one','$enc_id_two','$encry_mess_bs64')")){
+                //Its all okay
+            }else{
+                $feedback = "Could not send message ";
+            }
+        }catch(Exception $f){
+            echo $f;
+        } 
+      }
+  }
 ?>
