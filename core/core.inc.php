@@ -35,18 +35,5 @@ $feedback = '';
             }
         }
     }
-    function getUsers(){
-        global $users;
-        try {
-            $db = mysqli_connect('localhost','root','','chat-system');
-        } catch (Exception $e) {
-            echo $e;
-        }      
-        $query_two = "SELECT * FROM users";
-        $result = mysqli_query($db,$query_two);
-        $users = mysqli_fetch_all($result,MYSQLI_ASSOC);
-        mysqli_free_result($result);
-        mysqli_close($db);
-       
-    }
+
 ?>

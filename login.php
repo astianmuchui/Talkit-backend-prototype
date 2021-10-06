@@ -4,7 +4,6 @@
     if(isset($_POST['login'])){
         $name = htmlspecialchars($_POST['u_name']);
         $_pwd = htmlspecialchars($_POST['p_wd']);
-        
         require_once './classes/classes.php';
         $login = new PasswordDecryption();
         $login->decryptPassword();       

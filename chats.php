@@ -1,6 +1,7 @@
 <?php
-    require './core/core.inc.php';
-    getUsers();
+    require './classes/classes.php';
+    $fetch = new users();
+    $fetch->getUsers();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +42,8 @@
                 
             <div class="card">
                 <p><?php echo $user['uname'] ?></p>
-                <a href="./action/create_room.php?id=<?php echo $user['uid']; ?>">start chat</a>
+                <?php $uid = $user['uid'];?>
+                <a href="./action/create_room.php?id=<?php echo $uid; ?>">start chat</a>
 
             </div>
             <?php endforeach; ?>

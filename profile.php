@@ -31,7 +31,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="./chats.php?id=<?php echo $_SESSION['id']; ?>" class="btn">Start chat</a></li>
+                <li><a href="./chats.php" class="btn">Start chat</a></li>
                 <li><a href="#" class="btn">My chats</a></li>
                 <li><a href="#" class="btn">Logout</a></li>
                 
