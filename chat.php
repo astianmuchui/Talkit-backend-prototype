@@ -3,7 +3,7 @@
     require './classes/classes.php';
     if($_SESSION['id'] !== NULL ){
         $logged_in_user = $_SESSION['id'];
-        $table = $_SESSION['table'];
+        $table = $_SESSION['chat_room'];
         $recepient = ['recepientID'];
         $x = new ChatUser;
         $x->GetChatUser();
@@ -12,6 +12,7 @@
             $y = new message;
             $y->encryptMessage();
         }
+
     }else{
         header('./login.php');
     }
@@ -50,50 +51,13 @@
         <div class="leftbar">
             <main class="space">
                 <div class="bar">
-                    <h3>Amanda</h3>
+                    <h3><?php $m = new chatReceiver; $m->GetChatReceiver(); ?></h3>
                 </div>
                 <div class="chat-space">
-                    <div class="message-container">
-                        <div class="left-text">
-                            <p>Hi there, How you doing</p>
-                            <small>11:42 pm</small>
-                        </div>
-                    </div>
-
-                    <div class="message-container">
-                        <div class="right-text">
-                            <p>Hi too , I'm doing fine</p>
-                            <small>11:43 pm</small>
-                        </div>
-                    </div> <br> 
-
-                    <div class="message-container">
-                        <div class="left-text">
-                            <p>What do you think of the new instagram update</p>
-                            <small>11:44 pm</small>
-                        </div> <br>
-                    </div>
-                        <div class="message-container">
-                            <div class="right-text">
-                                <p>I think its very fine</p>
-                                <small>11:46 pm</small>
-                            </div>
-                            <div class="message-container">
-                        </div> <br>
-
-                        <div class="message-container">
-                            <div class="left-text">
-                                <p>What about twitter?</p>
-                                <small>11:47 pm</small>
-                            </div> <br>
-                        </div>
-                
-                        <div class="message-container">
-                            <div class="right-text">
-                                <p>Its fine too</p>
-                                <small>11:48 pm</small>
-                            </div>
-
+                    <?php 
+                        $b = new sender;
+                        $b->get();
+                    ?>
             </div>
             <div class="form-container">
                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
