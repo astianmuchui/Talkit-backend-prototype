@@ -44,8 +44,8 @@ session_start();
                 header("Location: ../profile.php");                
             }else{
                 $this->db = mysqli_connect('localhost','root','','chat-system');
-                $this->chatroom_name = $this->session_id ."and". $this->get_id;
-                $inverted_name = $this->get_id."and". $this->session_id; 
+                $this->chatroom_name = base64_encode($this->session_id ."and". $this->get_id);
+                $inverted_name = base64_encode($this->get_id."and". $this->session_id); 
                 #Check for the existence of the chatroom
                 $query = "SHOW TABLES;"; # Query to get all chatrooms
                 $result = mysqli_query($this->db,$query);
@@ -76,7 +76,9 @@ session_start();
                                     #ADD PRIMARY KEY TO THE ID
                                 $alter =  "ALTER TABLE `$this->chatroom_name` CHANGE `id` `id` INT(255) NOT NULL AUTO_INCREMENT, add PRIMARY KEY (`id`)";
                                 $run = mysqli_query($this->db,$alter);
+
                                 if($run){
+                                    //Insert record
                                     //Make session variables
                                     $_SESSION['chat_room'] = $this->chatroom_name;
                                     $_SESSION['recepientID'] = $this->get_id;
@@ -98,7 +100,20 @@ session_start();
         public function encrypt(){
             $this->password = $_POST['p_wd'];
             global $password,$final_passcode;    
-            $randLetters = array("545HDFGXMFNJDHHSCFNGJIFNFG","7899KIOVFNENFDDSVJBITHGVBAKFRY","64977VTGIZXHKCHJDGWFYDINHCV","450KICADMPJHFBGHFVHFB","JTTSXCLAORVJOD328FB","JSQMLFHAM468ASBFEHI","ATMEGA328PCBCVGJRF","OHM546CCSCJFGBKSDHYGDYE","ASSASCOUDWITEOGIAV4555","D8979HFGHJHGDIRBVFMGNJGHRU","J261646VHGIGHRBGXVCGJGFVFH","PF658979JGOJGRGIVCBUVSREP","NE555CCHGHJIW","TADA2030GTROUYVHDG");
+            $randLetters =  array("545HDFGXMFNJDHHSCFNGJIFNFG",
+            "7899KIOVFNENFDDSVJBITHGVBAKFRYFJVNFFKMVNDORU",
+            "64977VTGIZXHKCHJDGWFYDINHCVKVOEJFEOFLRVVJPE",
+            "450KICADMPJHFBGHFVHFBFJBNRFNDGJBNFIO",
+            "JTTSXCLAORVJOD328FBFJBNFTSFJNBIN",
+            "JSQMLFHAM468ASBFEHIFJVNGKCFJNV",
+            "ATMEGA328PCBCVGJRFJVNRGKDIHVDU",
+            "OHM546CCSCJFGBKSDHYGDYEFJKNFJ",
+            "ASSASCOUDWITEOGIAV4555VNIDNDOXD",
+            "D8979HFGHJHGDIRBVFMGNJGHRUFB",
+            "J261646VHGIGHRBGXVCGJGFVFHFBF",
+            "PF658979JGOJGRGIVCBUVSREPVIEYLD",
+            "NE555CCHGHJIWNDBGJFHFHDBFLOYDHSKA",
+            "TADA2030GTROUYVHDGHFVBJKSASASAKAK");  
             $randNo = rand(0,14);
             $base = $randLetters[$randNo];
             $encoded_base64 = base64_encode($password);
@@ -125,12 +140,25 @@ session_start();
                 try{
                     #ENCRYPTION ALGORITHM
                     $this->password = $_POST['p_wd'];
-                    $randLetters = array("545HDFGXMFNJDHHSCFNGJIFNFG","7899KIOVFNENFDDSVJBITHGVBAKFRY","64977VTGIZXHKCHJDGWFYDINHCV","450KICADMPJHFBGHFVHFB","JTTSXCLAORVJOD328FB","JSQMLFHAM468ASBFEHI","ATMEGA328PCBCVGJRF","OHM546CCSCJFGBKSDHYGDYE","ASSASCOUDWITEOGIAV4555","D8979HFGHJHGDIRBVFMGNJGHRU","J261646VHGIGHRBGXVCGJGFVFH","PF658979JGOJGRGIVCBUVSREP","NE555CCHGHJIW","TADA2030GTROUYVHDG");
+                    $randLetters =  array("545HDFGXMFNJDHHSCFNGJIFNFG",
+                    "7899KIOVFNENFDDSVJBITHGVBAKFRYFJVNFFKMVNDORU",
+                    "64977VTGIZXHKCHJDGWFYDINHCVKVOEJFEOFLRVVJPE",
+                    "450KICADMPJHFBGHFVHFBFJBNRFNDGJBNFIO",
+                    "JTTSXCLAORVJOD328FBFJBNFTSFJNBIN",
+                    "JSQMLFHAM468ASBFEHIFJVNGKCFJNV",
+                    "ATMEGA328PCBCVGJRFJVNRGKDIHVDU",
+                    "OHM546CCSCJFGBKSDHYGDYEFJKNFJ",
+                    "ASSASCOUDWITEOGIAV4555VNIDNDOXD",
+                    "D8979HFGHJHGDIRBVFMGNJGHRUFB",
+                    "J261646VHGIGHRBGXVCGJGFVFHFBF",
+                    "PF658979JGOJGRGIVCBUVSREPVIEYLD",
+                    "NE555CCHGHJIWNDBGJFHFHDBFLOYDHSKA",
+                    "TADA2030GTROUYVHDGHFVBJKSASASAKAK");  
                     $randNo = rand(0,14);
                     $base = $randLetters[$randNo];
                     $encoded_base64 = base64_encode($password);
                     $final_passcode = $base.$encoded_base64;
-                    $u_name = $this->username;
+                    $u_name = base64_encode($this->username);
                     $sql = "INSERT INTO users (`uname`,`pwd`) VALUES ('$u_name','$final_passcode')";
                     $db = mysqli_connect('localhost','root','','chat-system');    
                     if(mysqli_query($db,$sql)){
@@ -163,7 +191,20 @@ session_start();
         public function encryptPassword(){
             $this->name = $_POST['u_name'];
             $this->pwd = $_POST['p_wd']; 
-            $this->randLetters = array("545HDFGXMFNJDHHSCFNGJIFNFG","7899KIOVFNENFDDSVJBITHGVBAKFRY","64977VTGIZXHKCHJDGWFYDINHCV","450KICADMPJHFBGHFVHFB","JTTSXCLAORVJOD328FB","JSQMLFHAM468ASBFEHI","ATMEGA328PCBCVGJRF","OHM546CCSCJFGBKSDHYGDYE","ASSASCOUDWITEOGIAV4555","D8979HFGHJHGDIRBVFMGNJGHRU","J261646VHGIGHRBGXVCGJGFVFH","PF658979JGOJGRGIVCBUVSREP","NE555CCHGHJIW","TADA2030GTROUYVHDG");
+            $randLetters =  array("545HDFGXMFNJDHHSCFNGJIFNFG",
+            "7899KIOVFNENFDDSVJBITHGVBAKFRYFJVNFFKMVNDORU",
+            "64977VTGIZXHKCHJDGWFYDINHCVKVOEJFEOFLRVVJPE",
+            "450KICADMPJHFBGHFVHFBFJBNRFNDGJBNFIO",
+            "JTTSXCLAORVJOD328FBFJBNFTSFJNBIN",
+            "JSQMLFHAM468ASBFEHIFJVNGKCFJNV",
+            "ATMEGA328PCBCVGJRFJVNRGKDIHVDU",
+            "OHM546CCSCJFGBKSDHYGDYEFJKNFJ",
+            "ASSASCOUDWITEOGIAV4555VNIDNDOXD",
+            "D8979HFGHJHGDIRBVFMGNJGHRUFB",
+            "J261646VHGIGHRBGXVCGJGFVFHFBF",
+            "PF658979JGOJGRGIVCBUVSREPVIEYLD",
+            "NE555CCHGHJIWNDBGJFHFHDBFLOYDHSKA",
+            "TADA2030GTROUYVHDGHFVBJKSASASAKAK");  
             $randNo = rand(0,14);
             $encoded_base64 = base64_encode($this->pwd);
             $final_passcode = $encoded_base64;
@@ -176,9 +217,23 @@ session_start();
             global $feedback;
             $this->name = $_POST['u_name'];
             $this->pwd = $_POST['p_wd']; 
-            $this->randLetters = array("545HDFGXMFNJDHHSCFNGJIFNFG","7899KIOVFNENFDDSVJBITHGVBAKFRY","64977VTGIZXHKCHJDGWFYDINHCV","450KICADMPJHFBGHFVHFB","JTTSXCLAORVJOD328FB","JSQMLFHAM468ASBFEHI","ATMEGA328PCBCVGJRF","OHM546CCSCJFGBKSDHYGDYE","ASSASCOUDWITEOGIAV4555","D8979HFGHJHGDIRBVFMGNJGHRU","J261646VHGIGHRBGXVCGJGFVFH","PF658979JGOJGRGIVCBUVSREP","NE555CCHGHJIW","TADA2030GTROUYVHDG");   
+            $this->randLetters =  array("545HDFGXMFNJDHHSCFNGJIFNFG",
+            "7899KIOVFNENFDDSVJBITHGVBAKFRYFJVNFFKMVNDORU",
+            "64977VTGIZXHKCHJDGWFYDINHCVKVOEJFEOFLRVVJPE",
+            "450KICADMPJHFBGHFVHFBFJBNRFNDGJBNFIO",
+            "JTTSXCLAORVJOD328FBFJBNFTSFJNBIN",
+            "JSQMLFHAM468ASBFEHIFJVNGKCFJNV",
+            "ATMEGA328PCBCVGJRFJVNRGKDIHVDU",
+            "OHM546CCSCJFGBKSDHYGDYEFJKNFJ",
+            "ASSASCOUDWITEOGIAV4555VNIDNDOXD",
+            "D8979HFGHJHGDIRBVFMGNJGHRUFB",
+            "J261646VHGIGHRBGXVCGJGFVFHFBF",
+            "PF658979JGOJGRGIVCBUVSREPVIEYLD",
+            "NE555CCHGHJIWNDBGJFHFHDBFLOYDHSKA",
+            "TADA2030GTROUYVHDGHFVBJKSASASAKAK");  
             $conn = mysqli_connect('localhost','root','','chat-system');
-            $query = "SELECT * FROM `users` where `uname` = '$this->name'";
+            $u_bs64 = base64_encode($this->name);
+            $query = "SELECT * FROM `users` where `uname` = '$u_bs64'";
             $result = mysqli_query($conn,$query);
             $user = mysqli_fetch_assoc($result);                
             if($user == true){
@@ -290,7 +345,7 @@ class chatReceiver{
             $user_r = mysqli_fetch_assoc($result);
             mysqli_free_result($result);
             mysqli_close($db);
-            echo $user_r['uname'];
+            echo base64_decode($user_r['uname']);
         }catch(Exception $e){
             print $e;
         }
@@ -363,7 +418,6 @@ class chatReceiver{
         mysqli_free_result($result);
         mysqli_close($connect);
             foreach($messages as $singMessage){
-
                 global $mes_sage;
                 $decry_bs64_mess = base64_decode($singMessage['message']);
                 $decry_hex_mess = hex2bin($decry_bs64_mess);
@@ -390,5 +444,4 @@ class chatReceiver{
         }
   }
 #=====================================================================================================================================================================================#
-
 ?>

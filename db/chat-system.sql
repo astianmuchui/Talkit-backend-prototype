@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2021 at 04:14 PM
+-- Generation Time: Oct 11, 2021 at 05:57 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.10
 
@@ -24,6 +24,18 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rooms`
+--
+
+CREATE TABLE `rooms` (
+  `id` int(200) NOT NULL,
+  `tname` varchar(200) NOT NULL,
+  `date` timestamp(5) NOT NULL DEFAULT current_timestamp(5)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -39,11 +51,17 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uid`, `uname`, `pwd`, `date`) VALUES
-(1, 'Seb', '125525', '2021-09-29 08:46:39.353945');
+(1, 'U2ViIEFzdGlhbg==', '7899KIOVFNENFDDSVJBITHGVBAKFRYFJVNFFKMVNDORUMTIzMA==', '2021-10-11 03:55:34.600197');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `rooms`
+--
+ALTER TABLE `rooms`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -56,10 +74,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `rooms`
+--
+ALTER TABLE `rooms`
+  MODIFY `id` int(200) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `uid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `uid` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

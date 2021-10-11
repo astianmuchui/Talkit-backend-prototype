@@ -31,7 +31,7 @@
     <main>
         <div class="sidebar">
             <img src="./assets/img/images-removebg-preview.png" alt="" width="150" height="150">
-            <h2><?php echo $user['uname'] ?></h2>
+            <h2><?php echo base64_decode($user['uname']) ?></h2>
             
         </div>
         <div class="leftbar">

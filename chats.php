@@ -41,7 +41,7 @@
             <?php foreach($users as $user): ?>
                 
             <div class="card">
-                <p><?php echo $user['uname'] ?></p>
+                <p><?php echo base64_decode($user['uname']) ?></p>
                 <?php $uid = $user['uid'];?>
                 <a href="./action/create_room.php?id=<?php echo $uid; ?>">start chat</a>
 
