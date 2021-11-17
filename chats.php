@@ -20,7 +20,7 @@
         <nav>
             <ul>
                 <li><a href="#" class="btn">Profile</a></li>
-                <li><a href="#" class="btn">Logout</a></li>
+                <li><a href="./logout.php" class="btn">Logout</a></li>
             </ul>
         </nav>
     </header>

@@ -36,8 +36,8 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#" class="btn">Profile</a></li>
-                <li><a href="#" class="btn">Logout</a></li>
+                <li><a href="./profile.php" class="btn">Profile</a></li>
+                <li><a href="./logout.php?action=logout" class="btn">Logout</a></li>
             </ul>
         </nav>
     </header>

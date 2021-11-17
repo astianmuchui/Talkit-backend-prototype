@@ -1,1 +1,1 @@
-AOS.init();
+console.log('hi');

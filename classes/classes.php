@@ -29,71 +29,57 @@ session_start();
     }
 }
 #============================================================================================================================================#
-    class chatroom{
-        private $session_id;
-        private $get_id;
-        private $db;
-        private $chatroom_name;
-        public function BuildRoom(){
-            global $db;
-            $this->session_id = $_SESSION['id'];
-            $this->get_id = $_GET['id'];
-            #Ensure That one doesn"t create a chatroom with him/herself 
-            if($this->session_id == $this->get_id){
-                $pageID = $this->session_id*7;
-                header("Location: ../profile.php");                
-            }else{
-                $this->db = mysqli_connect('localhost','root','','chat-system');
-                $this->chatroom_name = base64_encode($this->session_id ."and". $this->get_id);
-                $inverted_name = base64_encode($this->get_id."and". $this->session_id); 
-                #Check for the existence of the chatroom
-                $query = "SHOW TABLES;"; # Query to get all chatrooms
-                $result = mysqli_query($this->db,$query);
-                $tables = mysqli_fetch_array($result,MYSQLI_NUM);
-                mysqli_free_result($result);
-                foreach ($tables as $table){
-                    if($this->chatroom_name == $table[0]){
-                        //FUNCTION TO REDIRECT HERE
-                        $_SESSION['chat_room'] = $this->chatroom_name;
+class chatroom {
+    private $session_id;
+    private $get_id;
+    private $db;
+    private $roomName;
+    public function constructRoom(){
+        $this->db = mysqli_connect('localhost','root','','chat-system');
+        $this->session_id = $_SESSION['id'];
+        $this->get_id = $_GET['id'];
+        $link_er = "Chats";
+        $arr_nums = array($this->session_id,$this->get_id);
+        $init_num = max($arr_nums);
+        $fin_num = min($arr_nums);
+        $this->roomName = base64_encode($init_num.$link_er.$fin_num);
+        //Query
+        $rooms = mysqli_fetch_assoc(mysqli_query($this->db,"SELECT * FROM `rooms` WHERE `tname` = '$this->roomName'"));
+        if($rooms == true){
+            //Simultaneous
+            $_SESSION['chat_room'] = $this->roomName;
+            $_SESSION['recepientID'] = $this->get_id;
+            header("Location: ../chat.php");
+        }else{
+            $create = "CREATE TABLE `$this->roomName` (
+                `id` int(255) NOT NULL,
+                `id_1` varchar(255) NOT NULL,
+                `id_2` varchar(255) NOT NULL,
+                `message` varchar(255) NOT NULL,
+                `date` timestamp(6) NOT NULL DEFAULT current_timestamp(6)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+                $buildRoom = mysqli_query($this->db,$create);
+            if($buildRoom){
+                    #ADD PRIMARY KEY TO THE ID
+                $alter =  "ALTER TABLE `$this->roomName` CHANGE `id` `id` INT(255) NOT NULL AUTO_INCREMENT, add PRIMARY KEY (`id`)";
+                $run = mysqli_query($this->db,$alter);
+
+                if($run){
+                    //Insert record
+                  if( mysqli_query($this->db,"INSERT INTO `rooms` (tname) VALUES('$this->roomName')")){
+                        //Make session variables
+                        $_SESSION['chat_room'] = $this->roomName;
                         $_SESSION['recepientID'] = $this->get_id;
                         header("Location: ../chat.php");
-                    }else{
-                        if($inverted_name == $table[0]){
-                            $_SESSION['chat_room'] = $inverted_name;
-                            $_SESSION['recepientID'] = $this->get_id;
-                            header("Location: ../chat.php");
-                        }else{
-                            # CREATE CHAT ROOM IF ITS NOT PRE-EXISTING
-                            $create = "CREATE TABLE `$this->chatroom_name` (
-                                `id` int(255) NOT NULL,
-                                `id_1` varchar(255) NOT NULL,
-                                `id_2` varchar(255) NOT NULL,
-                                `message` varchar(255) NOT NULL,
-                                `date` timestamp(6) NOT NULL DEFAULT current_timestamp(6)
-                            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
-                                $buildRoom = mysqli_query($this->db,$create);
-                            if($buildRoom){
-                                    #ADD PRIMARY KEY TO THE ID
-                                $alter =  "ALTER TABLE `$this->chatroom_name` CHANGE `id` `id` INT(255) NOT NULL AUTO_INCREMENT, add PRIMARY KEY (`id`)";
-                                $run = mysqli_query($this->db,$alter);
-
-                                if($run){
-                                    //Insert record
-                                    //Make session variables
-                                    $_SESSION['chat_room'] = $this->chatroom_name;
-                                    $_SESSION['recepientID'] = $this->get_id;
-                                    header("Location: ../chat.php");
-                                    //redirect to relevant page
-                                }
-                            }
-                        }
-                    }
+                        //redirect to relevant page
+                  }
                 }
-
-                mysqli_close($this->db);
             }
+        }
+        mysqli_close($this->db);   
     }
-}    
+}   
+
 #=============================================================================================================================================================================================#
     class encryption{
         private $password;
@@ -264,7 +250,6 @@ session_start();
                     }else{
                         //Nothing here
                     }
-
                 }
             }else{
                 //Wrong username
@@ -273,7 +258,6 @@ session_start();
         }
     }
 #=================================================================================================================================================================================#
-
     class users {
        public function getUsers(){
             global $users;
@@ -396,7 +380,7 @@ class chatReceiver{
         $this->logged_in_user = $_SESSION['id'];    
         $connect = mysqli_connect('localhost','root','','chat-system');    
         global $messages;    
-        $result = mysqli_query($connect,"SELECT * FROM `$this->table`");
+        $result = mysqli_query($connect,"SELECT * FROM `$this->table` ORDER BY  `id` DESC");
         $messages = mysqli_fetch_all($result,MYSQLI_ASSOC);
         mysqli_free_result($this->result);
         mysqli_close($connect);
@@ -413,7 +397,7 @@ class chatReceiver{
         $this->logged_in_user = $_SESSION['id'];    
         $connect = mysqli_connect('localhost','root','','chat-system');    
         global $messages;    
-        $result = mysqli_query($connect,"SELECT * FROM `$this->table` ORDER BY `date` DESC");
+        $result = mysqli_query($connect,"SELECT * FROM `$this->table` ORDER BY `date` ASC");
         $messages = mysqli_fetch_all($result,MYSQLI_ASSOC);
         mysqli_free_result($result);
         mysqli_close($connect);
@@ -423,13 +407,15 @@ class chatReceiver{
                 $decry_hex_mess = hex2bin($decry_bs64_mess);
                 if($this->logged_in_user == base64_decode($singMessage['id_1'])){
                     $time = substr($singMessage['date'],11,5);
+                    $class = "right-text";
+                    $altclass = "left-text";
                     $mes_sage = '
                     <div class="message-container">
                     <div class="right-text">
                         <p>'.$decry_hex_mess.'</p>
                         <small>'.$time.'</small>
                     </div> <br>';
-                    echo $mes_sage;
+                    echo $mes_sage."<br>";
                 }else{
                     $time = substr($singMessage['date'],11,5);
                     $mes_sage = '

@@ -36,6 +36,7 @@
         z-index: 9999;
         top: 0;
         display: inline-flex;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     }
     header .title p{
         font-family: monospace;

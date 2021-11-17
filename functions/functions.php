@@ -6,6 +6,7 @@
         }else{
             header("Location: ./login.php");
         }
+    
     }
 
     function FetchUser(){
