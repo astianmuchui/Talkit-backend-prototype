@@ -414,8 +414,8 @@ class chatReceiver{
                     <div class="right-text">
                         <p>'.$decry_hex_mess.'</p>
                         <small>'.$time.'</small>
-                    </div> <br>';
-                    echo $mes_sage."<br>";
+                    </div> ';
+                    echo $mes_sage."";
                 }else{
                     $time = substr($singMessage['date'],11,5);
                     $mes_sage = '
@@ -423,11 +423,31 @@ class chatReceiver{
                     <div class="left-text">
                         <p>'.$decry_hex_mess.'</p>
                         <small>'.$time.'</small>
-                    </div> <br>';
+                    </div> ';
                     echo $mes_sage;
                 }
             }
         }
   }
 #=====================================================================================================================================================================================#
+  class SEARCH_USER{
+      private $value;
+      private $conn;
+      public function search($value){
+        $this->value  = $_SESSION['form_val'];  
+        $this->conn = mysqli_connect('localhost','root','','chat-system');    
+        $SEARCH_RESULTS = mysqli_fetch_all((mysqli_query($this->db,"SELECT * FROM USERS WHERE `uname` LIKE '$value'")),MYSQLI_ASSOC);
+        foreach ($SEARCH_RESULTS as $SEARCH_RESULT) {
+            $u_nm = $SEARCH_RESULT['uname'];
+            $uID = $SEARCH_RESULT['uid'];
+            $div = '<div class="card">
+            <p><'. base64_decode($u_nm).' </p>
+            
+            <a href="./action/create_room.php?id='.$uID.'">start chat</a>
+
+        </div>';
+        echo $div;
+        }
+      }
+  }
 ?>

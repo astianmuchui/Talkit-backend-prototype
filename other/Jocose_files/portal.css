@@ -74,7 +74,7 @@ main{
     
 }
 .leftbar{
-    margin-top: 4%;
+    margin-top: 2%;
     margin-left: -10%;
     width: 100vw;
     background-color: #00030a;
@@ -93,6 +93,7 @@ main{
     color: #2fa4e7;
     position: relative;
     left: 40%;
+    margin-bottom: 2%;
     width: 200px;
     z-index: 2;
     display: inline-flex;

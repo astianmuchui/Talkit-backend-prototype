@@ -36,7 +36,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="./profile.php" class="btn">Profile</a></li>
+                <li><a href="./profile.php?id=<?php echo $_SESSION['id'] ?>" class="btn">Profile</a></li>
                 <li><a href="./logout.php?action=logout" class="btn">Logout</a></li>
             </ul>
         </nav>

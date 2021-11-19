@@ -2,6 +2,11 @@
     require './classes/classes.php';
     $fetch = new users();
     $fetch->getUsers();
+    if(isset($_POST['search'])){
+        $value = $_POST['value'];
+        $_SESSION['form_val'] = $value;
+        
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,8 +24,8 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#" class="btn">Profile</a></li>
-                <li><a href="./logout.php" class="btn">Logout</a></li>
+                <li><a href="./profile.php?id=<?php echo $_SESSION['id'] ?>" class="btn">Profile</a></li>
+                <li><a href="./logout.php?action=logout" class="btn">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -29,8 +34,8 @@
         <div class="form-container">
             
              <form action="" method="post">
-                 <input type="text" name="" id="" placeholder="Search users">
-                 <button type="submit"><i class="fas fa-search"></i></button>
+                 <input type="text" name="value" id="" placeholder="Search users">
+                 <button type="submit" name="search"><i class="fas fa-search"></i></button>
              </form>   
         </div>
 

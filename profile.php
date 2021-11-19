@@ -22,7 +22,7 @@
         <nav>
             <ul>
                 <li><a href="./chats.php" class="btn">Start chat</a></li>
-                <li><a href="#" class="btn">My chats</a></li>
+                
                 <li><a href="./logout.php?action=logout" class="btn">Logout</a></li>
                 
             </ul>
@@ -34,11 +34,12 @@
             <h2><?php  echo base64_decode($user['uname']) ?></h2>
             
         </div>
+        <h2 class="h-title">My Chats</h2>
+
         <div class="leftbar">
-            <h2>My Chats</h2>
            <?php 
            require "./classes/objects.php"; 
-           $f = new MEMBER_CHATROOMS;
+           $f = new MEMBER_CHATROOMS();
            $f->get_member_chatrooms();
            ?> 
         </div>

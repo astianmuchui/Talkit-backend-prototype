@@ -124,7 +124,7 @@ main{
     /* margin: 20px 0 0 20px; */
     background-color: #2fa4e7;
     width: 100%;
-    height: 40px;
+    height: 50px;
     box-sizing: border-box;
     padding: 5px;
     /* border-radius: 5px 5px 0 0; */
@@ -167,7 +167,7 @@ main{
     background-color: #2fa4e7;
     width: 350px;
     box-sizing: border-box;
-    padding: 5px;
+    padding: 10px;
     border-radius: 100px;
     display: flex;
     flex-direction: column;
@@ -194,7 +194,7 @@ main{
     background-color: rgb(231, 228, 228);
     width: 350px;
     box-sizing: border-box;
-    padding: 5px;
+    padding: 10px;
     border-radius: 100px;
     display: flex;
     flex-direction: column;
@@ -249,9 +249,8 @@ main{
     /* border: 1px solid #2fa4e7; */
     position: fixed;
     z-index: 2;
-    bottom: 18px;
+    bottom: 4px;
     background-color: #00030a;
-    left: 25%;
 }
 
 .form-container textarea {
