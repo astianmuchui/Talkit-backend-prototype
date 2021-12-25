@@ -226,7 +226,7 @@ class chatroom {
                 mysqli_free_result($result);
                 mysqli_close($conn);
                 //User exists 
-                //Proceed to check for password
+                //Proceed to check for the password
                 $upwd = $user['pwd'];
                 foreach($this->randLetters as $randLetter){
                     if(strpos($upwd,$randLetter) !== false){
