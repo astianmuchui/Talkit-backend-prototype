@@ -1,4 +1,5 @@
 <?php
+    // Prototype version
     $feedback = "";
     if(isset($_POST['signup'])){
         require './core/config.php';
